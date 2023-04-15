@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tasks_app/screens/recycle_bin.dart';
 import 'package:flutter_tasks_app/screens/tabs_screen.dart';
-import 'package:flutter_tasks_app/screens/pending_tasks_screen.dart';
 
 import '../blocs/bloc_exports.dart';
 
@@ -30,8 +29,8 @@ class MyDrawer extends StatelessWidget {
                     TabsScreen.id,
                   ),
                   child: ListTile(
-                    leading: Icon(Icons.folder_special),
-                    title: Text('My Task'),
+                    leading: const Icon(Icons.folder_special),
+                    title: const Text('My Task'),
                     trailing: Text('${state.pendingTasks.length} / ${state.completedTasks.length}'),
                   ),
                 );

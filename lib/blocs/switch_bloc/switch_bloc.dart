@@ -6,7 +6,7 @@ part 'switch_event.dart';
 part 'switch_state.dart';
 
 class SwitchBloc extends HydratedBloc<SwitchEvent, SwitchState> {
-  SwitchBloc() : super(SwitchInitial(switchValue: false)) {
+  SwitchBloc() : super(const SwitchInitial(switchValue: false)) {
     on<SwitchOnEvent>((event, emit) {
       emit(const SwitchState(switchValue: true));
     });

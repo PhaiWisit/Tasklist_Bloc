@@ -5,7 +5,6 @@ import 'package:flutter_tasks_app/services/app_theme.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'blocs/bloc_exports.dart';
-import 'screens/pending_tasks_screen.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,7 +48,7 @@ class MyApp extends StatelessWidget {
             theme: state.switchValue 
               ? AppThemes.appThemeData[AppTheme.darkTheme] 
               : AppThemes.appThemeData[AppTheme.lightTheme],
-            home: TabsScreen(),
+            home: const TabsScreen(),
             onGenerateRoute: appRouter.onGenerateRoute,
           );
         },

@@ -10,7 +10,8 @@ enum AppTheme{
       primarySwatch: Colors.grey,
       primaryColor: Colors.black,
       brightness: Brightness.dark,
-      backgroundColor: const Color(0xFF212121),
+      colorScheme: const ColorScheme.dark(),
+      // backgroundColor: const Color(0xFF212121),
       dividerColor: Colors.black54,
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: Colors.white,
@@ -21,7 +22,7 @@ enum AppTheme{
         ),
       ),
       textTheme: const TextTheme(
-        subtitle1: TextStyle(color: Colors.white),
+        titleMedium: TextStyle(color: Colors.white),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: Colors.grey, unselectedItemColor: Colors.white),
@@ -34,7 +35,8 @@ enum AppTheme{
       primarySwatch: Colors.grey,
       primaryColor: Colors.white,
       brightness: Brightness.light,
-      backgroundColor: const Color(0xFFE5E5E5),
+      colorScheme: const ColorScheme.light(),
+      // backgroundColor: const Color(0xFFE5E5E5),
       dividerColor: const Color(0xff757575),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: Colors.black,
@@ -46,7 +48,7 @@ enum AppTheme{
         ),
       ),
       textTheme: const TextTheme(
-        subtitle1: TextStyle(color: Colors.black),
+        titleMedium: TextStyle(color: Colors.black),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: Colors.grey,

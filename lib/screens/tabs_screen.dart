@@ -7,7 +7,7 @@ import 'package:flutter_tasks_app/screens/pending_tasks_screen.dart';
 import 'add_task_screen.dart';
 
 class TabsScreen extends StatefulWidget {
-  TabsScreen({Key? key}) : super(key: key);
+  const TabsScreen({Key? key}) : super(key: key);
 
   static const id = 'tabs_screen';
 
@@ -17,9 +17,9 @@ class TabsScreen extends StatefulWidget {
 
 class _TabsScreenState extends State<TabsScreen> {
   final List<Map<String, dynamic>> _pageDetails = [
-    {'pageName': PendingTasksScreen(), 'title': 'Pending Tasks'},
-    {'pageName': CompletedTasksScreen(), 'title': 'Completed Tasks'},
-    {'pageName': FavoritTasksScreen(), 'title': 'Favorit Tasks'},
+    {'pageName': const PendingTasksScreen(), 'title': 'Pending Tasks'},
+    {'pageName': const CompletedTasksScreen(), 'title': 'Completed Tasks'},
+    {'pageName': const FavoritTasksScreen(), 'title': 'Favorit Tasks'},
   ];
 
   var _selectedPage = 0;
@@ -27,6 +27,7 @@ class _TabsScreenState extends State<TabsScreen> {
   void _addTask(BuildContext context) {
     showModalBottomSheet(
         context: context,
+        isScrollControlled: true,
         builder: (context) => SingleChildScrollView(
               child: Container(
                 padding: EdgeInsets.only(
