@@ -11,14 +11,14 @@ class FavoritTasksScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TasksBloc, TasksState>(
       builder: (context, state) {
-        List<Task> tasksList = state.favoriteTasks;
+        List<Task> tasksList = state.favouriteTasks;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Center(
               child: Chip(
                 label: Text(
-                  '${state.favoriteTasks.length} Tasks',
+                  '${state.favouriteTasks.length} Tasks',
                 ),
               ),
             ),

@@ -50,7 +50,7 @@ class TaskTile extends StatelessWidget {
               const SizedBox(
                 width: 10,
               ),
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width * 0.50,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,7 +94,8 @@ class TaskTile extends StatelessWidget {
                   Navigator.of(context).pop();
                   _editTask(context);
                 },
-                restoreTaskCallback: () => context.read<TasksBloc>().add(RestoreTask(task: task)),
+                restoreTaskCallback: () =>
+                    context.read<TasksBloc>().add(RestoreTask(task: task)),
               )
             ],
           ),

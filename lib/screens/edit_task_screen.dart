@@ -1,10 +1,7 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
-
 import '../blocs/bloc_exports.dart';
 import '../models/task.dart';
-import '../services/guid_gen.dart';
 
 class EditTaskScreen extends StatelessWidget {
   final Task oldTask;

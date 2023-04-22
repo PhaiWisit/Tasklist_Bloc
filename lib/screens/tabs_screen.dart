@@ -19,7 +19,7 @@ class _TabsScreenState extends State<TabsScreen> {
   final List<Map<String, dynamic>> _pageDetails = [
     {'pageName': const PendingTasksScreen(), 'title': 'Pending Tasks'},
     {'pageName': const CompletedTasksScreen(), 'title': 'Completed Tasks'},
-    {'pageName': const FavoritTasksScreen(), 'title': 'Favorit Tasks'},
+    {'pageName': const FavoritTasksScreen(), 'title': 'Favourit Tasks'},
   ];
 
   var _selectedPage = 0;
