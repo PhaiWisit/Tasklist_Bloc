@@ -94,6 +94,7 @@ class TaskTile extends StatelessWidget {
                   Navigator.of(context).pop();
                   _editTask(context);
                 },
+                restoreTaskCallback: () => context.read<TasksBloc>().add(RestoreTask(task: task)),
               )
             ],
           ),

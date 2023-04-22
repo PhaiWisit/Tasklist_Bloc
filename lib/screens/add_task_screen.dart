@@ -1,3 +1,7 @@
+import 'dart:html';
+import 'dart:developer';
+
+
 import 'package:flutter/material.dart';
 
 import '../blocs/bloc_exports.dart';
@@ -66,6 +70,7 @@ class AddTaskScreen extends StatelessWidget {
                     );
                     context.read<TasksBloc>().add(AddTask(task: task));
                     Navigator.pop(context);
+                    log('Create Task ID = ${task.id} : ${task.title}');
                   },
                   child: const Text('Add'))
             ],

@@ -14,6 +14,7 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     on<RemoveTask>(_onRemoveTask);
     on<MarkFavoriteOrUnfavoriteTask>(_onMarkFavoriteOrUnfavoriteTask);
     on<EditTask>(_onEditTask);
+    on<RestoreTask>(_onRestoreTask);
   }
 
   void _onAddTask(AddTask event, Emitter<TasksState> emit) {
@@ -150,48 +151,27 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
       ),
     );
   }
+  void _onRestoreTask(RestoreTask event, Emitter<TasksState> emit) {
+    final state = this.state;
+    emit(
+      TasksState(
+        removeTasks: List.from(state.removeTasks)..remove(event.task),
+        pendingTasks: List.from(state.pendingTasks)
+          ..insert(
+              0,
+              event.task.copyWith(
+                isDeleted: false,
+                isDone: false,
+                isFavourite: false,
+              )),
+        completedTasks: state.completedTasks,
+        favoriteTasks: state.favoriteTasks,
+      ),
+    );
+  }
 }
 
 
-
-  // void _onEditTask(EditTask event, Emitter<TasksState> emit) {
-  //   final state = this.state;
-  //   List<Task> favouriteTasks = state.favoriteTasks;
-  //   if (event.oldTask.isFavorite == true) {
-  //     favouriteTasks
-  //       ..remove(event.oldTask)
-  //       ..insert(0, event.newTask);
-  //   }
-  //   emit(
-  //     TasksState(
-  //       pendingTasks: List.from(state.pendingTasks)
-  //         ..remove(event.oldTask)
-  //         ..insert(0, event.newTask),
-  //       completedTasks: state.completedTasks..remove(event.oldTask),
-  //       favoriteTasks: favouriteTasks,
-  //       removedTasks: state.removedTasks,
-  //     ),
-  //   );
-  // }
-
-  // void _onRestoreTask(RestoreTask event, Emitter<TasksState> emit) {
-  //   final state = this.state;
-  //   emit(
-  //     TasksState(
-  //       removedTasks: List.from(state.removedTasks)..remove(event.task),
-  //       pendingTasks: List.from(state.pendingTasks)
-  //         ..insert(
-  //             0,
-  //             event.task.copyWith(
-  //               isDeleted: false,
-  //               isDone: false,
-  //               isFavourite: false,
-  //             )),
-  //       completedTasks: state.completedTasks,
-  //       favoriteTasks: state.favoriteTasks,
-  //     ),
-  //   );
-  // }
 
   // void _onDeleteAllTask(DeleteAllTasks event, Emitter<TasksState> emit) {
   //   final state = this.state;

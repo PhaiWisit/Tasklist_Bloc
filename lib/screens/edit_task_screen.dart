@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import '../blocs/bloc_exports.dart';
@@ -73,6 +75,7 @@ class EditTaskScreen extends StatelessWidget {
                         .read<TasksBloc>()
                         .add(EditTask(oldTask: oldTask, newTask: editedTask));
                     Navigator.pop(context);
+                    log('Create Task ID = ${editedTask.id} : ${editedTask.title}');
                   },
                   child: const Text('Save'))
             ],
