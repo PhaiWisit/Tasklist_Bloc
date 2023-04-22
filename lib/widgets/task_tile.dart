@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tasks_app/screens/edit_task_screen.dart';
+import 'package:flutter_tasks_app/widgets/popup_menu.dart';
+import 'package:intl/intl.dart';
 
 import '../blocs/bloc_exports.dart';
 import '../models/task.dart';
@@ -17,26 +20,107 @@ class TaskTile extends StatelessWidget {
         : ctx.read<TasksBloc>().add(RemoveTask(task: task));
   }
 
+  void _editTask(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) => SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: EditTaskScreen(
+                  oldTask: task,
+                ),
+              ),
+            ));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(
-        task.title,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-            decoration: task.isDone! ? TextDecoration.lineThrough : null),
+    return Padding(
+      padding: const EdgeInsets.only(left: 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              task.isFavourite == false
+                  ? const Icon(Icons.star_outline)
+                  : const Icon(Icons.star),
+              const SizedBox(
+                width: 10,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.50,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      task.title,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: 18,
+                          decoration:
+                              task.isDone! ? TextDecoration.lineThrough : null),
+                    ),
+                    Text(
+                      DateFormat().add_yMMMd().add_Hms().format(
+                            DateTime.parse(task.date),
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Checkbox(
+                value: task.isDone,
+                onChanged: task.isDeleted == false
+                    ? (value) {
+                        context.read<TasksBloc>().add(UpdateTask(task: task));
+                      }
+                    : null,
+              ),
+              PopupMenu(
+                task: task,
+                likeOrDislikeCallback: () => context
+                    .read<TasksBloc>()
+                    .add(MarkFavoriteOrUnfavoriteTask(task: task)),
+                cancelOrDeleteCalleback: () =>
+                    _removeOrDeleteTask(context, task),
+                editTaskCallback: () {
+                  Navigator.of(context).pop();
+                  _editTask(context);
+                },
+              )
+            ],
+          ),
+        ],
       ),
-      trailing: Checkbox(
-        value: task.isDone,
-        onChanged: task.isDeleted == false
-            ? (value) {
-                context.read<TasksBloc>().add(UpdateTask(task: task));
-              }
-            : null,
-      ),
-      onLongPress: () =>
-          // context.read<TasksBloc>().add(DeleteTask(task: task))
-          _removeOrDeleteTask(context, task),
     );
   }
 }
+
+
+
+
+// ListTile(
+//       title: Text(
+//         task.title,
+//         overflow: TextOverflow.ellipsis,
+//         style: TextStyle(
+//             decoration: task.isDone! ? TextDecoration.lineThrough : null),
+//       ),
+//       trailing: Checkbox(
+//         value: task.isDone,
+//         onChanged: task.isDeleted == false
+//             ? (value) {
+//                 context.read<TasksBloc>().add(UpdateTask(task: task));
+//               }
+//             : null,
+//       ),
+//       onLongPress: () =>
+//           _removeOrDeleteTask(context, task),
+//     );
