@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_tasks_app/models/task.dart';
 
@@ -7,7 +9,7 @@ part 'tasks_event.dart';
 part 'tasks_state.dart';
 
 class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
-  TasksBloc() : super(const TasksState()) {
+  TasksBloc() : super( const TasksState()) {
     on<AddTask>(_onAddTask);
     on<UpdateTask>(_onUpdateTask);
     on<DeleteTask>(_onDeleteTask);
@@ -36,31 +38,41 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     List<Task> completedTasks = state.completedTasks;
     List<Task> favouriteTasks = state.favouriteTasks;
     if (task.isDone == false) {
+      log('Set is done');
       if (task.isFavourite == false) {
+        log('in pending tasks');
         pendingTasks = List.from(pendingTasks)..remove(task);
         completedTasks = List.from(completedTasks)
           ..insert(0, task.copyWith(isDone: true));
       } else {
+        log('in favorite tasks');
         var taskIndex = favouriteTasks.indexOf(task);
         pendingTasks = List.from(pendingTasks)..remove(task);
         completedTasks = List.from(completedTasks)
           ..insert(0, task.copyWith(isDone: true));
-        favouriteTasks = List.from(favouriteTasks)
-          ..remove(task)
-          ..insert(taskIndex, task.copyWith(isDone: true));
+        favouriteTasks.remove(task);
+        favouriteTasks.insert(taskIndex, task.copyWith(isDone: true));
+        // favouriteTasks = List.from(favouriteTasks)
+        //   ..remove(event.task)
+        //   ..insert(taskIndex, task.copyWith(isDone: true));
       }
     } else {
+      log('Set is undone');
       if (task.isFavourite == false) {
+        log('in completed tasks');
         completedTasks = List.from(completedTasks)..remove(task);
         pendingTasks = List.from(pendingTasks)
           ..insert(0, task.copyWith(isDone: false));
       } else {
+        log('in favorite tasks');
         var taskIndex = favouriteTasks.indexOf(task);
         completedTasks = List.from(completedTasks)..remove(task);
         pendingTasks = List.from(pendingTasks)..insert(0, task.copyWith(isDone: false));
-        favouriteTasks = List.from(favouriteTasks)
-          ..remove(task)
-          ..insert(taskIndex, task.copyWith(isDone: false));
+        favouriteTasks.remove(task);
+        favouriteTasks.insert(taskIndex, task.copyWith(isDone: false));
+        // favouriteTasks = List.from(favouriteTasks)
+        //   ..remove(task)
+        //   ..insert(taskIndex, task.copyWith(isDone: false));
       }
     }
     // ? {
@@ -125,7 +137,9 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     List<Task> completedTasks = state.completedTasks;
     List<Task> favouriteTasks = state.favouriteTasks;
     if (event.task.isDone == false) {
+      log('Pending Tasks');
       if (event.task.isFavourite == false) {
+        log('Set favorite in pending tasks');
         var taskIndex = pendingTasks.indexOf(event.task);
         pendingTasks = List.from(pendingTasks)
           ..remove(event.task)
@@ -134,6 +148,7 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
           ..insert(0, event.task.copyWith(isFavourite: true));
         // favouriteTasks.insert(0, event.task.copyWith(isFavourite: true));
       } else {
+        log('Set unfavorite in pending tasks');
         var taskIndex = pendingTasks.indexOf(event.task);
         pendingTasks = List.from(pendingTasks)
           ..remove(event.task)
@@ -142,18 +157,23 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
         // favouriteTasks.remove(event.task);
       }
     } else {
+      log('Completed Tasks');
       if (event.task.isFavourite == false) {
+        log('Set is favorite in completed tasks');
         var taskIndex = completedTasks.indexOf(event.task);
         completedTasks = List.from(completedTasks)
           ..remove(event.task)
           ..insert(taskIndex, event.task.copyWith(isFavourite: true));
-        favouriteTasks.insert(0, event.task.copyWith(isFavourite: true));
+          favouriteTasks = List.from(favouriteTasks)..insert(0, event.task.copyWith(isFavourite: true));
+        // favouriteTasks.insert(0, event.task.copyWith(isFavourite: true));
       } else {
+        log('Set is unfavorite in completed tasks');
         var taskIndex = completedTasks.indexOf(event.task);
         completedTasks = List.from(completedTasks)
           ..remove(event.task)
           ..insert(taskIndex, event.task.copyWith(isFavourite: false));
-        favouriteTasks.remove(event.task);
+          favouriteTasks = List.from(favouriteTasks)..remove(event.task);
+        // favouriteTasks.remove(event.task);
       }
     }
     emit(TasksState(

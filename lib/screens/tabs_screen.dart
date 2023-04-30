@@ -1,9 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_tasks_app/blocs/bloc_exports.dart';
+import 'package:flutter_tasks_app/models/task.dart';
 import 'package:flutter_tasks_app/screens/completed_tasks_screen.dart';
 import 'package:flutter_tasks_app/screens/favorit_tasks_screen.dart';
 import 'package:flutter_tasks_app/screens/my_drawer.dart';
 import 'package:flutter_tasks_app/screens/pending_tasks_screen.dart';
 
+import '../services/send_order.dart';
 import 'add_task_screen.dart';
 
 class TabsScreen extends StatefulWidget {
@@ -37,6 +42,34 @@ class _TabsScreenState extends State<TabsScreen> {
             ));
   }
 
+  void _sendTask(BuildContext context) {
+    // List<Task> favoritTasks = context.read<TasksBloc>().state.favouriteTasks.toList();
+    // for(int i=0; i< favoritTasks.length; i++){
+    //   log('${i+1}. ${favoritTasks[i].title} \n  ${favoritTasks[i].description}');
+    // }
+
+    List<Task> pendingTasks = context.read<TasksBloc>().state.pendingTasks;
+
+    final String favouriteTasksAsString =
+        'งานทั้งหมด\n--------------------------' +
+            pendingTasks
+                .map((task) =>
+                    '\nเรื่อง : ${task.title}\nรายละเอียด : ${task.description}')
+                .join('\n--------------------------');
+
+    if (pendingTasks.isEmpty) {
+      const snackBar = SnackBar(
+        content: Text('ไม่มีงานให้ส่งในขณะนี้'),
+        duration: Duration(seconds: 1),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    } else {
+      SendOrder.sendOrder(favouriteTasksAsString);
+    }
+
+    log(favouriteTasksAsString);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,13 +84,19 @@ class _TabsScreenState extends State<TabsScreen> {
       ),
       drawer: const MyDrawer(),
       body: _pageDetails[_selectedPage]['pageName'],
-      floatingActionButton: _selectedPage == 0
-          ? FloatingActionButton(
-              onPressed: () => _addTask(context),
-              tooltip: 'Add Task',
-              child: const Icon(Icons.add),
-            )
-          : null,
+      floatingActionButton: FabCondition(
+        _selectedPage,
+        () => _addTask(context),
+        () => _sendTask(context),
+      ),
+
+      // _selectedPage == 0
+      //     ? FloatingActionButton(
+      //         onPressed: () => _addTask(context),
+      //         tooltip: 'Add Task',
+      //         child: const Icon(Icons.add),
+      //       )
+      //     : null,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedPage,
         onTap: (index) {
@@ -81,5 +120,18 @@ class _TabsScreenState extends State<TabsScreen> {
         ],
       ),
     );
+  }
+}
+
+Widget FabCondition(
+    _selectedPage, VoidCallback _addTask, VoidCallback _sendTask) {
+  if (_selectedPage == 4) {
+    return FloatingActionButton(
+        onPressed: _addTask, tooltip: 'Add Task', child: const Icon(Icons.add));
+  } else if (_selectedPage == 0) {
+    return FloatingActionButton(
+        onPressed: _sendTask, tooltip: 'Send ', child: const Icon(Icons.send));
+  } else {
+    return Container();
   }
 }

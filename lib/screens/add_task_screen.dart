@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import '../blocs/bloc_exports.dart';
 import '../models/task.dart';
-import '../services/guid_gen.dart';
 import '../services/uuid_gen.dart';
 
 class AddTaskScreen extends StatelessWidget {
@@ -59,16 +58,26 @@ class AddTaskScreen extends StatelessWidget {
                   child: const Text('cancel')),
               ElevatedButton(
                   onPressed: () {
-                    UniqueIdGenerator generator = UniqueIdGenerator();
-                    String uniqueId = generator.generateUniqueId();
-                    var task = Task(
-                        title: titleController.text,
-                        description: descriptionController.text,
-                        id: uniqueId,
-                        date: DateTime.now().toString());
-                    context.read<TasksBloc>().add(AddTask(task: task));
-                    Navigator.pop(context);
-                    log('Create Task ID = ${task.id} : ${task.title}');
+                    if (titleController.text.isEmpty) {
+                      
+                      // const snackBar = SnackBar(
+                      //   content: Text('กรุณาใส่ title'),
+                      //   duration: Duration(seconds: 1),
+                      // );
+                      // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                    } else {
+                      UniqueIdGenerator generator = UniqueIdGenerator();
+                      String uniqueId = generator.generateUniqueId();
+                      var task = Task(
+                          title: titleController.text,
+                          description: descriptionController.text,
+                          id: uniqueId,
+                          date: DateTime.now().toString());
+                      context.read<TasksBloc>().add(AddTask(task: task));
+                      Navigator.pop(context);
+                      log('Create Task ID = ${task.id} : ${task.title}');
+                    }
                   },
                   child: const Text('Add'))
             ],
